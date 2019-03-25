@@ -365,7 +365,7 @@ public class NGSIMongoSink extends NGSIMongoBaseSink {
                     continue;
                 } // if
                 
-                // check if the attribute name is timeInstant; use the notified reception time instead
+                // check if the attribute name is timeInstant; use this time instead the reception time
                 if (attrName.equals("timeInstant") || attrName.equals("TimeInstant")) {
                     Date timeInstant = CommonUtils.stringtoDate(attrValue);
                     
