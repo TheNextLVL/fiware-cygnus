@@ -362,7 +362,8 @@ By default, `NGSISTHSink` has a configured batch size and batch accumulation tim
 [Top](#top)
 
 #### <a name="section2.3.2"></a>About `recvTime` and `TimeInstant` metadata
-By default, `NGSISTHSink` stores the notification reception timestamp. Nevertheless, if a metadata named `TimeInstant` is notified, then such metadata value is used instead of the reception timestamp. This is useful when wanting to persist a measure generation time (which is thus notified as a `TimeInstant` metadata) instead of the reception time.
+Nevertheless, if working in `row` mode and a metadata named  `TimeInstant` is notified, then such metadata value is used instead of the reception timestamp. If working in `column` mode and a attribute named `TimeInstant`is notified, then shuch value is used instead of the reception timestamp for the whole column.
+This is useful when wanting to persist a measure generation time (which is thus notified as a `TimeInstant` metadata) instead of the reception time.
 
 [Top](#top)
 
