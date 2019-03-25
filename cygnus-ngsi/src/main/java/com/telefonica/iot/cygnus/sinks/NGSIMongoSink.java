@@ -372,7 +372,7 @@ public class NGSIMongoSink extends NGSIMongoBaseSink {
                     if (timeInstant != null) {
                         LOGGER.debug("[" + getName() + "] Processing context attribute (name=" + attrName + ", type="
                             + attrType + ") --> Changing recvTime to timeInsant value");
-                        doc.set("recvTime", timeInstant);
+                        doc.put("recvTime", timeInstant);
                         continue;
                     } // if
                 } // if
