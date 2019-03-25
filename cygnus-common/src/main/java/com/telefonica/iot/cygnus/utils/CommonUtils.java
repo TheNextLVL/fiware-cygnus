@@ -462,5 +462,84 @@ public final class CommonUtils {
         LOGGER.debug("Loading aws-java-sdk-dynamodb from " + myClassURL.toExternalForm());
 
     } // printLoadedJars
+           
+    /**
+     * converts ISO8601 text to Date class, if is possible.
+     * @param text
+     * @return the parsed date-time (Date object)
+     */
+    public static Date stringtoDate(String text) {
+        DateTime dateTime;
+   
+        try {
+            // ISO 8601 without miliseconds
+            dateTime = FORMATTER1.parseDateTime(text);
+        } catch (Exception e1) {
+            LOGGER.debug(e1.getMessage());
+            
+            try {
+                // ISO 8601 with miliseconds
+                dateTime = FORMATTER2.parseDateTime(text);
+            } catch (Exception e2) {
+                LOGGER.debug(e2.getMessage());
+                
+                try {
+                    // ISO 8601 with microsencods
+                    String textTruncated = text.substring(0, text.length() - 4) + "Z";
+                    dateTime = FORMATTER2.parseDateTime(textTruncated);
+                } catch (Exception e3) {
+                    LOGGER.debug(e3.getMessage());
+                    
+                    try {
+                        // SQL timestamp without miliseconds
+                        dateTime = FORMATTER3.parseDateTime(text);
+                    } catch (Exception e4) {
+                        LOGGER.debug(e4.getMessage());
+
+                        try {
+                            // SQL timestamp with miliseconds
+                            dateTime = FORMATTER4.parseDateTime(text);
+                        } catch (Exception e5) {
+                            LOGGER.debug(e5.getMessage());
+                            
+                            try {
+                                // SQL timestamp with microseconds
+                                String textTruncated = text.substring(0, text.length() - 3);
+                                dateTime = FORMATTER4.parseDateTime(textTruncated);
+                            } catch (Exception e6) {
+                                LOGGER.debug(e6.getMessage());
+
+                                try {
+                                    // ISO 8601 with offset (without milliseconds)
+                                    dateTime = FORMATTER5.parseDateTime(text);
+                                } catch (Exception e7) {
+                                    LOGGER.debug(e7.getMessage());
+
+                                    try {
+                                        // ISO 8601 with offset (with milliseconds)
+                                        Matcher matcher = FORMATTER6_PATTERN.matcher(text);
+                                        if (matcher.matches()) {
+                                            String textTruncated = matcher.group(1) + "."
+                                              + matcher.group(2).substring(0, 3)
+                                              + matcher.group(3);
+                                            dateTime = FORMATTER6.parseDateTime(textTruncated);
+                                        } else {
+                                            LOGGER.debug("ISO8601 format does not match");
+                                            return null;
+                                        } // if
+                                    } catch (Exception e8) {
+                                        LOGGER.debug(e8.getMessage());
+                                        return null;
+                                    } // try catch
+                                } // try catch
+                            } // try catch
+                        } // try catch
+                    } // try catch
+                } // try catch
+            } // try catch
+        } // try catch
+
+        return dateTime.toDate();
+    } // stringtoDate
 
 } // CommonUtils

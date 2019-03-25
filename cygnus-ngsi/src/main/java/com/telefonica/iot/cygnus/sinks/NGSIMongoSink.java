@@ -365,6 +365,18 @@ public class NGSIMongoSink extends NGSIMongoBaseSink {
                     continue;
                 } // if
                 
+                // check if the attribute name is timeInstant; use the notified reception time instead
+                if (attrName.equals("timeInstant") || attrName.equals("TimeInstant")) {
+                    Date timeInstant = CommonUtils.stringtoDate(attrValue);
+                    
+                    if (timeInstant != null) {
+                        LOGGER.debug("[" + getName() + "] Processing context attribute (name=" + attrName + ", type="
+                            + attrType + ") --> Changing recvTime to timeInsant value");
+                        doc.set("recvTime", timeInstant);
+                        continue;
+                    } // if
+                } // if
+				
                 LOGGER.debug("[" + getName() + "] Processing context attribute (name=" + attrName + ", type="
                         + attrType + ")");
                 doc.append(attrName, attrValue);
